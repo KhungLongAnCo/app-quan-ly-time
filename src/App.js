@@ -1,74 +1,86 @@
 import React, { Component } from 'react';
 import './App.css';
-
+import TaskForm from './component/TaskForm'
+import Control from './component/Control'
+import TaskList from './component/TaskList'
 
 
 class App extends Component {
-  constructor(props){
-	 super(props);
-	 this.state = {
-		userName:'',
-		PassWord: '',
-		Note: '',
-		language: 1,
-		sex:'male',
-		Agree: false
-
-	 }
-  }
-  SubmitRegis = (event) => {
-	event.preventDefault();
-	console.log(event);
-  }
-  changeDataForm = (event) =>{
-	  var target = event.target;
-	  let name = target.name;
-	  let value = target.type === 'checkbox' ? target.checked : target.value
-	  this.setState({
-		  [name]: value
-	  })
-  }
-  render() {
-    return (
-      
-      <div className="container">          
-        <form action="" method="get" onSubmit={this.SubmitRegis} onChange={this.changeDataForm}>
-          <legend>Form Registrater</legend>
-        
-          <div className="form-group">
-            <label>UserName</label>
-            <input type="text" className="form-control" name="userName" />
-				<label>PassWord</label>
-            <input type="password" className="form-control" name="PassWord" />
-				<label>Note</label>
-				<br />
-				<textarea name="Note"></textarea>
-				<br/>
-				<label>Languages</label>
-				<br/>
-				<select name="language" value={this.state.language} onChange={this.changeDataForm}>
-					<option value={0}>VietName</option>
-					<option value={1}>Japan</option>
-				</select>
-				<br />
-				<br />
-				<input type="radio" name="sex" value="male" checked={this.state.sex === 'male' }  onChange={this.changeDataForm}/>
-				Nam
-				<input type="radio" name="sex" value="female" checked={this.state.sex === 'female' } onChange={this.changeDataForm} />
-				Nu
-				<br />
-				I agree
-				<br />
-				<input type="checkbox" name="Agree" value={true}  onChange={this.changeDataForm}/>
-          </div>
-          <button type="submit" className="btn btn-primary">Submit</button>
-			 <button type="reset" className="btn btn-primary">Reset</button>
-        </form>
-      </div>
-      
-     
-    );
-  }
+	constructor(props){
+		super(props);
+		let ids = require('short-id');
+		this.state = {
+			tasks: [
+				{
+					id: ids.generate(),
+					name:'action 1',
+					status: true
+				},
+				{
+					id: ids.generate(),
+					name:'action 2',
+					status: false
+				},
+				{
+					id: ids.generate(),
+					name:'action 3',
+					status: true
+				}
+			]
+		}
+	}
+	
+	onGeneratedata = () => {
+		console.log(this.state.tasks);
+		let tasks =  [
+			{
+				id: this.generateId(),
+				name:'action 1',
+				status: true
+			},
+			{
+				id: this.generateId(),
+				name:'action 2',
+				status: false
+			},
+			{
+				id: this.generateId(),
+				name:'action 3',
+				status: true
+			}
+		]
+		console.log(tasks);
+	}
+	s4(){
+		return Math.floor((1 + Math.random())* 0x10000).toString(16).substring(1);
+	}
+	generateId = () =>{
+		return this.s4() + this.s4()+ '-' + this.s4() + this.s4() + '-' + this.s4()+ '-';
+	}
+	
+		render(){	
+				return (					
+					<div className="container ">
+					<h1 className="text-center">Quản lý công việc</h1>
+					<br />
+					<br />
+					<TaskForm />
+					<div className="col-lg-9 col-md-9 col-xs-9">
+						<div className="col-md-12">              
+							<button type="button" className="btn btn-primary">+ Thêm công việc</button>    
+							<button type="button" 
+							className="btn btn-danger"
+							onClick={this.onGeneratedata}
+							>Generate Data</button>    
+							<br />
+							<br />        
+						</div>
+						<Control />      
+					</div>
+					<TaskList />
+				</div>
+				)
+		}
 }
 
 export default App;
