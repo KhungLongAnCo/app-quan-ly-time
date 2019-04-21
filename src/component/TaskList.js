@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import TaskItemList from './TaskItemList';
 class TaskList extends Component {
-		render(){	
+		render(){
+			let {tasks} = this.props;
+			var ListItem = tasks.map((item, index) => {
+				return <TaskItemList item={item} key={item.id} index={index} />
+			})	
 				return (					
-					<div className="col-lg-9 col-md-9 col-xs-9">
-						<br />           
+					           
 						<table className="table table-bordered table-hover">
 							<thead>
 								<tr>
@@ -38,13 +41,10 @@ class TaskList extends Component {
                                     </td>
 									
 								</tr>
-                                <TaskItemList />
-                                <TaskItemList />
-                                <TaskItemList />
+                                {ListItem}
 								
 							</tbody>
 						</table>
-					</div>
 				)
 		}
 }

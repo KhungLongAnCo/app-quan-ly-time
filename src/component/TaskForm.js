@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 
 class TaskForm extends Component {
+	closeForm = () =>{
+		this.props.controlForm();
+	}
 		render(){	
 				return (					
-					<div className="col-lg-3 col-md-3 col-xs-3">      
+					      
 						<div className="panel panel-danger">
 							<div className="panel-heading">
 								<h3 className="panel-title">Thêm công việc 
-									<span className="fas fa-times-circle iconFromTask">                         
+									<span className="fas fa-times-circle iconFromTask" onClick={this.closeForm}>                         
 									</span>
 								</h3>
 							</div>
@@ -31,7 +34,7 @@ class TaskForm extends Component {
 								</form>                  
 							</div>
 						</div>                
-					</div>
+					
 				)
 		}
 }

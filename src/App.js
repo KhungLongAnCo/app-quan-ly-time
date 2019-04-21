@@ -8,30 +8,29 @@ import TaskList from './component/TaskList'
 class App extends Component {
 	constructor(props){
 		super(props);
-		let ids = require('short-id');
 		this.state = {
 			tasks: [
 				{
-					id: ids.generate(),
+					id: '',
 					name:'action 1',
 					status: true
 				},
 				{
-					id: ids.generate(),
+					id: '',
 					name:'action 2',
 					status: false
 				},
 				{
-					id: ids.generate(),
+					id: '',
 					name:'action 3',
 					status: true
 				}
-			]
+			],
+			isDisplayForm: false
 		}
 	}
 	
 	onGeneratedata = () => {
-		console.log(this.state.tasks);
 		let tasks =  [
 			{
 				id: this.generateId(),
@@ -49,36 +48,77 @@ class App extends Component {
 				status: true
 			}
 		]
-		console.log(tasks);
+		this.setState({
+			tasks:tasks
+		})
+		localStorage.setItem('tasks', JSON.stringify(tasks));
 	}
+	componentWillMount(){
+		if(localStorage && localStorage.getItem('tasks')){
+			var tasks = JSON.parse(localStorage.getItem('tasks'))
+			this.setState({
+				tasks:tasks
+			})
+		}
+		
+	}
+	// create short id
 	s4(){
-		return Math.floor((1 + Math.random())* 0x10000).toString(16).substring(1);
+		let ids = require('short-id');
+		return ids.generate();
 	}
+	// Create new id
 	generateId = () =>{
 		return this.s4() + this.s4()+ '-' + this.s4() + this.s4() + '-' + this.s4()+ '-';
 	}
-	
+	// displayForm 
+	displayForm = () => {
+		this.setState({
+			isDisplayForm: !this.state.isDisplayForm
+		})
+	}
+	// close Form 
+	closeForm = (params) =>{
+		this.setState({
+			isDisplayForm: !this.state.isDisplayForm
+		})
+	}
 		render(){	
+			let {tasks} = this.state;
+			let {isDisplayForm} = this.state;
+			let disPlayTaskForm = isDisplayForm === true ? <TaskForm controlForm = {this.closeForm} /> : '';
 				return (					
 					<div className="container ">
-					<h1 className="text-center">Quản lý công việc</h1>
-					<br />
-					<br />
-					<TaskForm />
-					<div className="col-lg-9 col-md-9 col-xs-9">
-						<div className="col-md-12">              
-							<button type="button" className="btn btn-primary">+ Thêm công việc</button>    
-							<button type="button" 
-							className="btn btn-danger"
-							onClick={this.onGeneratedata}
-							>Generate Data</button>    
-							<br />
-							<br />        
+						<h1 className="text-center">Quản lý công việc</h1>
+						<br />
+						<br />
+						<div className="col-lg-3 col-md-3 col-xs-3">
+						{ disPlayTaskForm }
 						</div>
-						<Control />      
+						
+						<div 
+						className={isDisplayForm === false ? 'col-lg-12 col-md-12 col-xs-12' : 'col-lg-9 col-md-9 col-xs-9'}
+						>
+							<div className="col-md-12">              
+								<button type="button" 
+								className="btn btn-primary"
+								onClick={this.displayForm}
+								>+ Thêm công việc</button>    
+								<button type="button" 
+								className="btn btn-danger"
+								onClick={this.onGeneratedata}
+								>Generate Data</button>    
+								<br />
+								<br />        
+							</div>
+							<Control />   
+							
+							<div className="col-lg-12 col-md-12 col-xs-12">
+								<br />
+								<TaskList tasks={tasks} />
+							</div>   
+						</div>					
 					</div>
-					<TaskList />
-				</div>
 				)
 		}
 }
