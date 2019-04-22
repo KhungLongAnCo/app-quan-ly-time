@@ -25,7 +25,7 @@ class TaskForm extends Component {
 			[name]: value
 		})
 	}
-	// pass data to app.js
+	// pass data to app.js to create item and modify 
 	onSubmit = (event) =>{
 		event.preventDefault();
 		this.props.onSubmit(this.state);
@@ -49,6 +49,25 @@ class TaskForm extends Component {
 			status:item.status
 		})
 		}
+	}
+	componentWillReceiveProps(nextProps){
+		// chuyen tu tao moi sang modify
+		if(nextProps && nextProps.modifyItem){
+			this.setState({
+			id: nextProps.modifyItem.id,
+			name: nextProps.modifyItem.name,
+			status: nextProps.modifyItem.status
+		})
+		}
+		// chuyen tu modify sang new
+		if(!nextProps.modifyItem){
+			this.setState({
+				id: '',
+				name: '',
+				status: false
+		})
+	}
+	
 	}
 		render(){	
 			let id = this.state.id;

@@ -59,7 +59,8 @@ class App extends Component {
 	// displayForm 
 	displayForm = () => {
 		this.setState({
-			isDisplayForm: true
+			isDisplayForm: true,
+			itemModify: ''
 		})
 	}
 	// close Form 
@@ -94,9 +95,10 @@ class App extends Component {
 			this.closeForm();
 			
 		}	
-		console.log(tasks);
 		localStorage.setItem('tasks', JSON.stringify(tasks));
 	}
+	
+
 	// update Status
 	updateStatus = (index) =>{
 		let tasks = this.state.tasks;
@@ -135,7 +137,12 @@ class App extends Component {
 			itemModify:itemModify
 		})	
 	
-		this.displayForm();
+		this.showModifyForm();
+	}
+	showModifyForm = () => {
+		this.setState({
+			isDisplayForm: true
+		})
 	}
 
 		render(){	
