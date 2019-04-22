@@ -40,6 +40,11 @@ class App extends Component {
 				tasks:tasks
 			})
 		}
+		if(this.state.itemModify){
+			this.setState({
+				itemModify: null
+			});
+		}
 		
 	}
 	// create short id
@@ -66,16 +71,30 @@ class App extends Component {
 	}
 	//get data from taskForm add Item
 	onSubmit = (data) =>{
-		let task = {
-			id:this.generateId(),
-			name:data.name,
-			status:data.status
-		};
+		if(data.status === 'true'){
+			data.status = true
+		}
+		if(data.status === 'false'){
+			data.status = false
+		}
 		var tasks = this.state.tasks;
-		tasks.push(task);
-		this.setState({
-			tasks:tasks
-		})
+		if(data.id === ''){
+			data.id = this.generateId();
+			tasks.push(data);
+			this.setState({
+				tasks:tasks
+			})
+		}
+		else{
+			let index = this.findIndex(data.id);
+			tasks[index] = data;
+			this.setState({
+				tasks:tasks
+			})
+			this.closeForm();
+			
+		}	
+		console.log(tasks);
 		localStorage.setItem('tasks', JSON.stringify(tasks));
 	}
 	// update Status
@@ -98,31 +117,27 @@ class App extends Component {
 		// close form 
 		this.closeForm();
 	}
-
+	// find index theo id truyen vao
+	findIndex = (id) => {
+		var tasks = this.state.tasks;
+		var indextask = '';
+		tasks.forEach((item, index) => {
+			if(item.id === id){
+				indextask = index;
+			}
+		})
+		return indextask;
+	}
 	//show modify 
 	showModify = (index) => {
 		let itemModify = this.state.tasks[index];
 		this.setState({
 			itemModify:itemModify
 		})	
+	
 		this.displayForm();
 	}
-	// // modify item
-	// getmodifyItem = async (itemMofidy) => {
-	// 	var tasks = this.state.tasks;
-	// 	var indexItem = '';
-	// 	await tasks.forEach((item, index) => {
-	// 		if(item.id === itemMofidy.id){
-	// 			indexItem = index;
-	// 		}
-	// 	})
-	// 	tasks.splice(indexItem, 1, itemMofidy);
-	// 	this.setState({
-	// 		tasks:tasks
-	// 	});
-	// 	localStorage.setItem('tasks', JSON.stringify(tasks));
 
-	// }
 		render(){	
 			let {tasks} = this.state;
 			let {isDisplayForm} = this.state;

@@ -4,9 +4,9 @@ class TaskForm extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
+			id: '',
 			name:'',
-			status: false,
-			id: ''
+			status: false
 		}
 	}
 	closeForm = () =>{
@@ -29,18 +29,15 @@ class TaskForm extends Component {
 	onSubmit = (event) =>{
 		event.preventDefault();
 		this.props.onSubmit(this.state);
-		let nameWork = document.getElementById('nameWork');
-		nameWork.value = '';
+		this.setState({
+			id: '',
+			name: '',
+			status: false
+		})
 	}
 	// click HUY BO close form and clear input
 	onClear = () =>{
-		
 		this.closeForm();
-	}
-	// modify sucess
-	modifySuccess = (event) =>{
-		event.preventDefault();
-		this.props.getmodifyItem(this.state);
 	}
 	// when form load componentWillMount will call and assign value for input and select
 	componentWillMount(){
@@ -54,11 +51,12 @@ class TaskForm extends Component {
 		}
 	}
 		render(){	
+			let id = this.state.id;
 				return (						 
-						<div className={this.props.modifyItem ? 'panel panel-danger' : 'panel panel-primary' }>
+						<div className={id !== '' ? 'panel panel-danger' : 'panel panel-primary' }>
 							<div className="panel-heading">
 								<h3 className="panel-title">
-									{this.props.modifyItem ? 'Chỉnh sửa công việc' : 'Thêm công việc'} 
+									{id !== ''  ? 'Chỉnh sửa công việc' : 'Thêm công việc'} 
 									<span className="fas fa-times-circle iconFromTask" onClick={this.closeForm}>                         
 									</span>
 								</h3>
@@ -66,7 +64,7 @@ class TaskForm extends Component {
 							<div className="panel-body">                  
 								<form 
 								onChange={this.changeData} 
-								onSubmit={this.props.modifyItem ? this.modifySuccess : this.onSubmit}>                   
+								onSubmit={this.onSubmit}>                   
 									<div className="form-group">
 										<label>Tên :</label>
 										<input type="text"
@@ -90,7 +88,7 @@ class TaskForm extends Component {
 									</div>        
 									<br />    
 									<div className="buttonTaskForm">
-									<button type="submit" className="btn btn-warning">{this.props.modifyItem ? 'Sửa' : '+Lưu lại'}</button>                      
+									<button type="submit" className="btn btn-warning">{id !== ''  ? 'Sửa' : '+Lưu lại'}</button>                      
 									<button type="button" 
 									className="btn btn-danger"
 									onClick={this.onClear}
