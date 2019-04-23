@@ -101,8 +101,8 @@ class TaskForm extends Component {
 										name='status' 
 										className="form-control" 
 										required="required">
-											<option value={true}>Kích hoạt</option>
-											<option value={false}>Không</option>
+											<option value={true}>active</option>
+											<option value={false}>No</option>
 										</select>                        
 									</div>        
 									<br />    

@@ -1,6 +1,26 @@
 import React, { Component } from 'react';
 import TaskItemList from './TaskItemList';
 class TaskList extends Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			filterName: '',
+			filterStatus: ''
+		}
+	}
+	onChange = (event) =>{
+		let target = event.target;
+		let name = target.name;
+		let value = target.value;
+		this.setState({
+			[name]: value
+		})
+		this.props.filterList(
+			name === 'filterName' ? value : this.state.filterName,
+			name === 'filterStatus' ? value : this.state.filterStatus
+		);
+		
+	}
 		render(){
 			let {tasks} = this.props;
 			var ListItem = tasks.map((item, index) => {
@@ -28,18 +48,28 @@ class TaskList extends Component {
 								<tr>
 									<td></td>
 									<td>
-										<input type="text" className="form-control" />
+										<input type="text" 
+										className="form-control" 
+										
+										name = 'filterName'
+										value = {this.state.filterName}	
+										onChange={this.onChange}										
+										/>
 									</td>
 									<td>
-										<select>
-											<option value ={1}>
+										<select
+										onChange={this.onChange}	
+										name = 'filterStatus'
+										value = {this.state.filterStatus}
+										>
+											<option value ='all'>
 												Tất cả
 											</option>
-											<option value ={2}>
+											<option value ='active'>
 												Active
 											</option>
-											<option value ={3}>
-												NotActive
+											<option value ='complete'>
+												Hết hạn
 											</option>
 										</select>
 									</td>

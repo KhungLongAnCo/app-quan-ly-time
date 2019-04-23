@@ -29,6 +29,11 @@ class App extends Component {
 			isDisplayForm:false,
 			itemModify:{
 
+			},
+			filterList:{
+				filterName:'',
+				filterStatus: '',
+				filterSentences: ''
 			}
 		}
 	}
@@ -144,11 +149,33 @@ class App extends Component {
 			isDisplayForm: true
 		})
 	}
+	// filter data 
+	filterList = (name, status) => {
+		this.setState({
+			filterList:{
+				filterName: name,
+				filterStatus: status,
+				filterSentences: ''
+			}
+		})
+	}
+	filterSentences = (data) => {
+		this.setState({
+			filterList:{
+				filterSentences: data
+			}
+		})
+	}
 
 		render(){	
 			let {tasks} = this.state;
 			let {isDisplayForm} = this.state;
 			let disPlayTaskForm ='';
+			let {filterList} = this.state;
+			let filterName = filterList.filterName;
+			let filterStatus = filterList.filterStatus;
+			let filterSentences = filterList.filterSentences;
+			// show form 
 			if(isDisplayForm === true){
 				disPlayTaskForm = <TaskForm 
 				controlForm = {this.closeForm}
@@ -160,10 +187,37 @@ class App extends Component {
 			else{
 				disPlayTaskForm = '';
 			}
+
+			// FILTER
+			// filter by name
+			if(filterName){
+				tasks = tasks.filter((task) => {
+					return task.name.toLowerCase().indexOf(filterName) >= 0;
+				})
+			}
+			// filter status
+			if(filterStatus === 'active'){
+				tasks = tasks.filter((task) => {
+					return task.status === true
+				})
+			}
+			if(filterStatus === 'complete'){
+				tasks = tasks.filter((task) => {
+					return task.status === false
+				})
+			}
+			// filter Sentences
+			if(filterSentences){
+				tasks = tasks.filter((task) => {
+					return task.name.indexOf(filterSentences) !== -1;
+				})
+			}
+			
+
 				return (					
 					<div className="container ">
 						<h1 className="text-center">Quản lý công việc</h1>
-						<br />
+						<hr />
 						<br />
 						<div className="col-lg-3 col-md-3 col-xs-3">
 							{ disPlayTaskForm }
@@ -181,14 +235,16 @@ class App extends Component {
 								<br />
 								<br />        
 							</div>
-							<Control />   
+							<Control filterSentences = {this.filterSentences}/>   
 							
 							<div className="col-lg-12 col-md-12 col-xs-12">
 								<br />
-								<TaskList tasks={tasks} 
+								<TaskList 
+								tasks={tasks} 
 								updateStatus = {this.updateStatus} 
 								removeItem = {this.removeItem}
 								showModify ={this.showModify}
+								filterList = {this.filterList}
 								/>
 							</div>   
 						</div>					

@@ -21,7 +21,7 @@ class TaskItemList extends Component {
                     className={tasks.item.status === true ? 'label label-danger' : 'label label-success'}
                     onClick={this.updateStatus}
                     >
-                    {tasks.item.status === true ? 'active' : 'Hết hạn'}</span>
+                    {tasks.item.status === true ? 'active' : 'complete'}</span>
                     </td>
                         <td>
                             <button type="button" 

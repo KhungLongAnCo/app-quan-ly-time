@@ -6,7 +6,7 @@ class Control extends Component {
 		render(){	
 				return (					
 					<div>
-                        <Search />
+                        <Search filterSentences = {this.props.filterSentences} />
 						<Sort />        
                     </div> 
 				)
