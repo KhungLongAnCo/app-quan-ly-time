@@ -34,6 +34,10 @@ class App extends Component {
 				filterName:'',
 				filterStatus: '',
 				filterSentences: ''
+			},
+			Sort:{
+				by:'',
+				value:''
 			}
 		}
 	}
@@ -166,6 +170,14 @@ class App extends Component {
 			}
 		})
 	}
+	SortList = (by, value) =>{
+		this.setState({
+			Sort:{
+				by:by,
+				value:value
+			}
+		})
+	}
 
 		render(){	
 			let {tasks} = this.state;
@@ -175,6 +187,7 @@ class App extends Component {
 			let filterName = filterList.filterName;
 			let filterStatus = filterList.filterStatus;
 			let filterSentences = filterList.filterSentences;
+			let {Sort} = this.state;
 			// show form 
 			if(isDisplayForm === true){
 				disPlayTaskForm = <TaskForm 
@@ -212,8 +225,23 @@ class App extends Component {
 					return task.name.indexOf(filterSentences) !== -1;
 				})
 			}
-			
-
+			// sort by name A- Z
+			console.log(Sort)
+			if(Sort.by === 'name' && Sort.value === 1){
+				tasks = tasks.sort(function(a, b){
+					if(a.name < b.name){ return -1;}
+					if(a.name > b.name){ return 1;}
+					return 0;
+				})
+			}
+			// sort by name Z-A
+			if(Sort.by === 'name' && Sort.value === -1){
+				tasks = tasks.sort(function(a, b){
+					if(a.name > b.name){ return -1;}
+					if(a.name < b.name){ return 1;}
+					return 0;
+				})
+			}
 				return (					
 					<div className="container ">
 						<h1 className="text-center">Quản lý công việc</h1>
@@ -235,7 +263,9 @@ class App extends Component {
 								<br />
 								<br />        
 							</div>
-							<Control filterSentences = {this.filterSentences}/>   
+							<Control filterSentences = {this.filterSentences}
+								SortList = {this.SortList}
+							/>   
 							
 							<div className="col-lg-12 col-md-12 col-xs-12">
 								<br />
